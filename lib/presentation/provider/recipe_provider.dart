@@ -1,0 +1,42 @@
+import 'package:flutter/material.dart';
+import 'package:recipebook/domain/entities/recipe.dart';
+
+import '../../data/service/api_service.dart';
+
+class RecipeProvider extends ChangeNotifier{
+  ApiService _apiService=ApiService();
+  List<Recipe>_categoryRecipe=[];
+  List<Recipe>_searchRecipe=[];
+  List<Recipe>get categoryRecipe=>_categoryRecipe;
+  List<Recipe>get searchRecipe=>_searchRecipe;
+bool _isLoading=false;
+bool get isLoading=>_isLoading;
+
+Future<void>fetchCategoryRecipe(String category)async{
+  _isLoading=true;
+  notifyListeners();
+  try {
+    final categoryRecipe = await _apiService.getRecipeCategories(category);
+  }catch(e){
+    print('Error fetching category recipes: $e');
+  }finally{
+    _isLoading=false;
+    notifyListeners();
+  }
+
+  }
+
+  Future<void>searchRecipes(String query)async{
+    _isLoading=true;
+    notifyListeners();
+    try {
+      final searchRecipe = await _apiService.searchRecipes(query);
+    }catch(e){
+      print('Error searching recipes: $e');
+    }finally{
+      _isLoading=false;
+      notifyListeners();
+    }
+  }
+
+}
