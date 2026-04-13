@@ -16,7 +16,8 @@ Future<void>fetchCategoryRecipe(String category)async{
   _isLoading=true;
   notifyListeners();
   try {
-    final categoryRecipe = await _apiService.getRecipeCategories(category);
+     _categoryRecipe = await _apiService.getRecipeCategories(category);
+
   }catch(e){
     print('Error fetching category recipes: $e');
   }finally{
@@ -30,7 +31,8 @@ Future<void>fetchCategoryRecipe(String category)async{
     _isLoading=true;
     notifyListeners();
     try {
-      final searchRecipe = await _apiService.searchRecipes(query);
+       _searchRecipe = await _apiService.searchRecipes(query);
+
     }catch(e){
       print('Error searching recipes: $e');
     }finally{

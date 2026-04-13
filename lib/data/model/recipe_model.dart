@@ -5,7 +5,7 @@ class RecipeModel extends Recipe{
 
   factory RecipeModel.fromJson(Map<String, dynamic> json) {
     return RecipeModel(
-      id: json['id'],
+      id: json['id'].toString(),
       title: json['title'],
       image: json['image'],
     );
