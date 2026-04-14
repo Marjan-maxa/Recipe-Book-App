@@ -42,7 +42,13 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [Text('Recipe Book'), Text('Welcome Back')],
+          children: [Text(AppStrings.welcomeBack,style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: AppColors.grey
+          ),), Text('Md Marjan',style:Theme.of(context).textTheme.bodySmall?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: AppColors.black
+          ),)],
         ),
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -57,12 +63,21 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SearchScreen()),
+                MaterialPageRoute(builder: (context) => const SearchScreen()),
               );
             },
             icon: Icon(Icons.search),
           ),
-          IconButton(onPressed: () {}, icon: Icon(Icons.notifications)),
+          IconButton(
+            style: IconButton.styleFrom(
+
+              overlayColor: Colors.black,
+              side: BorderSide(color: AppColors.white70, width: 1),
+              shape: CircleBorder(
+                side: BorderSide(color: AppColors.primaryLight, width: 1),
+              ),
+            ),
+              onPressed: () {}, icon: Icon(Icons.notifications,color: AppColors.primaryLight,)),
         ],
       ),
       body: SafeArea(
@@ -77,11 +92,21 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
               _buildCategoryCard(),
-
+              const SizedBox(height: 15,),
+              Text('Popular Recipes',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),),
               Expanded(
                 child: Consumer<RecipeProvider>(
                   builder: (context, provider, child) {
+                    if (provider.isLoading) {
+                      return Center(child: CircularProgressIndicator());
+                    }else {
+                      if (provider.categoryRecipe.isEmpty) {
+                        return Center(child: Text(AppStrings.noRecipesFound));
+                      }
+                    }
                     return ListView.builder(
+                      clipBehavior: .none,
+                      scrollDirection: .horizontal,
                       itemCount: provider.categoryRecipe.length,
                       itemBuilder: (context, index) {
                         return RecipeCard(recipe: provider.categoryRecipe[index]);
@@ -101,7 +126,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return SizedBox(
       height: 40,
       child: ListView.builder(
-
         clipBehavior: .none,
         scrollDirection: Axis.horizontal,
         itemCount: categories.length,

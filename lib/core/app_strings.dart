@@ -2,7 +2,7 @@ class AppStrings {
   static const String appName = 'Recipe App';
 
   // API Constants
-  static const String apiKey = '600307033c2c498792efee935de72917';
+  static const String apiKey = '93ed1c51fb2745339440843df604c23a';
 
   // UI Strings
   static const String categories = 'Categories';

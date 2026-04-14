@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:recipebook/domain/entities/recipe.dart';
 
+import '../../data/model/recipe_detaild_model.dart';
 import '../../data/service/api_service.dart';
 
 class RecipeProvider extends ChangeNotifier{
@@ -9,6 +10,8 @@ class RecipeProvider extends ChangeNotifier{
   List<Recipe>_searchRecipe=[];
   List<Recipe>get categoryRecipe=>_categoryRecipe;
   List<Recipe>get searchRecipe=>_searchRecipe;
+  RecipeDetails? _recipeDetails;
+  RecipeDetails? get recipeDetails => _recipeDetails;
 bool _isLoading=false;
 bool get isLoading=>_isLoading;
 
@@ -35,6 +38,18 @@ Future<void>fetchCategoryRecipe(String category)async{
 
     }catch(e){
       print('Error searching recipes: $e');
+    }finally{
+      _isLoading=false;
+      notifyListeners();
+    }
+  }
+  Future<void>fetchRecipeDetails(String id)async{
+    _isLoading=true;
+    notifyListeners();
+    try {
+      _recipeDetails =await _apiService.getRecipeDetails(id);
+    }catch(e){
+      print('Error fetching recipe details: $e');
     }finally{
       _isLoading=false;
       notifyListeners();
